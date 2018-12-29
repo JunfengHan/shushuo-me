@@ -15,5 +15,16 @@
   "bugs": {
     "url": "https://github.com/JunfengHan/shushuo-me/issues"
   },
-  "homepage": "https://github.com/JunfengHan/shushuo-me#readme"
+  "homepage": "https://github.com/JunfengHan/shushuo-me#readme",
+  "devDependencies": {
+    "ejs": "^2.6.1",
+    "webpack": "^4.28.2"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "lodash": "^4.17.11",
+    "vue": "^2.5.21",
+    "vue-router": "^3.0.2",
+    "vuex": "^3.0.1"
+  }
 }
