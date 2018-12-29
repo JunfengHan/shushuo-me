@@ -1,0 +1,19 @@
+{
+  "name": "shushuo-me",
+  "version": "1.0.0",
+  "description": "my blog",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JunfengHan/shushuo-me.git"
+  },
+  "author": "hanjun",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JunfengHan/shushuo-me/issues"
+  },
+  "homepage": "https://github.com/JunfengHan/shushuo-me#readme"
+}
