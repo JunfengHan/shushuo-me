@@ -38,7 +38,7 @@ exports.Route = Route
 // 格式化路径
 const normalizePath = path => path.startsWith('/') ? path : `/${path}`
 
-// --->修饰符 router
+// --->修饰符 router,实现请求方法和路由的匹配
 const router = conf => (target, name, descriptor) => {
     conf.path = normalizePath(conf.path)
 
@@ -49,7 +49,7 @@ const router = conf => (target, name, descriptor) => {
     }, target[name])
 }
 
-// 修饰符controller ---> 实现路径前缀
+// 修饰符controller ---> 实现路由前缀的匹配
 const controller = path => target => (target.prototype[symbolPrefix] = path)
 
 const get = path => router({

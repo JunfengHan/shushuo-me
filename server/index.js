@@ -1,6 +1,7 @@
 const Koa = require('koa')
 const { resolve } = require('path')
 
+const { connect, initSchemas, initAdmin } = require('./data/init')
 const R = require('ramda')
 const MIDDLEWARES = ['router']
 
@@ -18,6 +19,12 @@ const useMiddlewares = (app) => {
 }
 
 ;(async () => {
+    // ---> 连接数据库,初始化所有schema
+    await connect()
+    initSchemas()
+    // 初始化一个用户，用于测试
+    await initAdmin()
+
     const app = new Koa()
 
     await useMiddlewares(app)

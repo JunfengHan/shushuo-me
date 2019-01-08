@@ -30,7 +30,7 @@ class userController {
         }
 
         return (ctx.body = {
-            success: false;
+            success: false,
             err: '用户名或密码不正确'
         })
     }
