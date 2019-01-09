@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "my blog",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env NODE_ENV=dev node start.js",
