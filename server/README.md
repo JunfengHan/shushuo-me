@@ -53,15 +53,6 @@ npm run dev
 
 ```
 .
-├── build                           项目打包构建配置
-│   ├── build.js                    打包
-│   |── check-version.js            运行环境检查
-│   |── dev-server.js               开发环境运行
-|   |── utils.js                    工具类
-│   |── vue-loader.conf.js             
-│   |── webpack.base.conf.js        webpack基础配置      
-│   |── webpack.dev.conf.js         webpack开发环境配置
-│   └── webpack.prod.conf.js        webpack生产环境配置
 ├── config                          运行配置
 │   ├──                  
 │   └── 
@@ -76,36 +67,14 @@ npm run dev
 │   ├── router.js                   路由中间件
 ├── routes                          路由文件
 │   ├── user.js                     用户
-├── service                         server服务
+├── service                         项目服务
 │   ├── user.js                     用户
 ├── index.js                        入口文件
 ├── package.json
-└── README.md                  
+├── README.md                  
 .
 
 ```
 
 ### 部分文件说明
-- nodemon.json nodemon的配置文件，开发环境下监听软重启node服务
-```
-{
-    <!-- 项目重启 -->
-    "restartable": "rs",
-    "ignore": [
-        ".git",
-        "node_modules/**/node_modules"
-    ],
-    "verbose": true,
-    "execMap": {
-        "js": "node --harmony"
-    },
-    <!-- 监听文件变化 -->
-    "watch": [
-        "server/",
-        "src/page"
-    ],
-    <!-- 监听所有后缀文件变化 -->
-    "ext": "js json" 
-}
-
-```
+- package.json
