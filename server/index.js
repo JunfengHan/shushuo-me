@@ -29,6 +29,10 @@ const useMiddlewares = (app) => {
 
     await useMiddlewares(app)
 
-    app.listen(4000)
+    app.listen(4000, function (err) {
+        if (err) {
+            console.log('服务器监听出错了：' + err)
+        }
+    })
     console.log('Server Running at 4000')
 })()
