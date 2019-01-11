@@ -22,7 +22,7 @@ class Route {
         // ---> 遍历routerMap, 注册所有的路由、控制器及各个方法和中间件
         for (let [conf, controller] of routerMap) {
             const controllers = isArray(controller)
-            const prefixPath = conf.target[symbolPrefix]
+            let prefixPath = conf.target[symbolPrefix]
             if (prefixPath) prefixPath = normalizePath(prefixPath)
             const routerPath = prefixPath + conf.path
             this.router[conf.method](routerPath, ...controllers)

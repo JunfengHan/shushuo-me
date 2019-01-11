@@ -41,7 +41,7 @@ userSchema.virtual('isLocked').get(function () {
 
 userSchema.pre('save', function (next) {
     if (this.isNew) {
-        this.meta.createdAt = this.meta.updatedAt = Data.now()
+        this.meta.createdAt = this.meta.updatedAt = Date.now()
     } else {
         this.meta.updatedAt = Date.now()
     }
@@ -73,7 +73,7 @@ userSchema.methods = {
 
     incLoginAttempts: function (user) {
         return new Promise((resolve, reject) => {
-            if (this.lockUntil && this.lockUntil < Data.now()) {
+            if (this.lockUntil && this.lockUntil < Date.now()) {
                 this.update({
                     $set: {
                         loginAttempts: 1

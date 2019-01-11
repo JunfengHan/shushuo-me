@@ -16,6 +16,15 @@ module.exports = {
         port: 4000,
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
+        // ---> 代理路径
+        /* context: [
+            '/home',
+            '/article',
+            '/comment'
+        ],
+        proxypath: 'http://api.shushuo.me:4000',
+        */
+        // ---> 使用axios跨域请求
         proxyTable: {},
         cssSouceMap: false
     }

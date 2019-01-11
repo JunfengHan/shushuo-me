@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const glob = require('glob')
-const db = 'mongodb://localhost:27018/db-shushuo'
+const db = 'mongodb://localhost:27018/db'
 const { resolve } = require('path')
 
 mongoose.Promise = global.Promise

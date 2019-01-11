@@ -15,8 +15,8 @@ export const dev = async app => {
      * ---> 因为跨域问题，后端可以用 koa-cors 允许跨域请求
     **/
 
-    app.use(serve(r('../views')))
-    app.use(views(r('../views')), {
+    app.use(serve(r('../../../dist')))
+    app.use(views(r('../../../dist')), {
         extension: 'html'
     })
 

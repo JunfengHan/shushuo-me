@@ -5,8 +5,8 @@ const { resolve } = require('path')
 const r = path => resolve(__dirname, path)
 
 export const dev = async app => {
-    app.use(serve(r('../../../dist')))
-    app.use(views(r('../../../dist')), {
+    app.use(serve(r('../views')))
+    app.use(views(r('../views')), {
         extension: 'html'
     })
 
