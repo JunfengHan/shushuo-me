@@ -7,13 +7,14 @@ var views = require('koa-views')
 var serve = require('koa-static')
 var opn = require('opn')
 var proxyMiddleware = require('http-proxy-middleware')
+var webpack = require('webpack')
 var webpackConfig = require('./webpack.dev.conf')
 
 var port = process.env.PORT || config.dev.port
 // Define HTTP proxies to your custom API backend
 var proxyTable = config.dev.proxyTable
 
-var app = koa()
+var app = new koa()
 var compiler = webpack(webpackConfig)
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const glob = require('glob')
-const db = 'mongodb://localhost:27018/db'
+const db = 'mongodb://localhost:27017/db'
 const { resolve } = require('path')
 
 mongoose.Promise = global.Promise
@@ -44,7 +44,7 @@ exports.connect = () => {
             if (maxConnectTimes < 5) {
                 mongoose.connect(db)
             } else {
-                throw new Error('数据库挂了，赶快修吧！！！')
+                throw new Error('数据库没连上，赶快修吧！')
             }
         })
     
@@ -56,7 +56,7 @@ exports.connect = () => {
             if (maxConnectTimes < 5) {
                 mongoose.connect(db)
             } else {
-                throw new Error('数据库挂了，赶快修吧！！！')
+                throw new Error('数据库挂了，赶快修吧！！')
             }
         })
     
