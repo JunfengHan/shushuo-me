@@ -2,9 +2,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routes from './router/router'
-import store from './store'
-import { routerMode } from './router/env'
-import './config/rem'
+// import store from './store'
+// import { routerMode } from './config/env'
+// import './config/rem'
 import FastClick from 'fastclick'
 
 if ('addEventListener' in document) {
@@ -34,5 +34,5 @@ const router = new VueRouter({
 
 new Vue({
 	router,
-	store
+	// store
 }).$mount('#app')

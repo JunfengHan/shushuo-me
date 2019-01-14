@@ -1,9 +1,22 @@
 {
-    "presets": ["es2015", "stage-2"],
+    "presets": [
+		["es2015", {
+			"modules": false
+		}],
+		"stage-2" 
+	],
     "plugins": [
-      "transform-runtime",
-      "transform-decorators-legacy",
+		"transform-runtime",
+		"syntax-dynamic-import",
+    	"transform-decorators-legacy",
         "transform-class-properties"
     ],
-    "comments": false,
+	"comments": false,
+	"env": {
+		// ---> test 是提前设置的环境变量，如果没有设置BABEL_ENV则使用NODE_ENV,如果都没有默认是 development
+		"test": {
+			"presets": ["env", "stage-2"],
+			"plugins": ["istanbul"]
+		}
+	}
   }

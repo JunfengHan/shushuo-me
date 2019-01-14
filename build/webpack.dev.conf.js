@@ -13,14 +13,16 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
 })
 
 module.exports = merge(baseWebpackConfig, {
+    mode: 'development',
     module: {
         rules: [{
-            test: /\.(sa|sc|c)ss$/,
+            test: /\.(sa|sc|le|c)ss$/,
             use: [
                 devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
                 'css-loader', // translates CSS into CommonJS
-                'sass-loader', // compiles Less to CSS
-                // loader: "style-loader" // creates style nodes from JS strings
+                'less-loader'
+                // 'sass-loader',            // compiles Less to CSS
+                // loader: "style-loader"    // creates style nodes from JS strings
             ]
         }]
     },

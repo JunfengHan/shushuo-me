@@ -7,7 +7,7 @@ const login = r => require.ensure([], () => r(require('../page/login/login')), '
 const forget = r => require.ensure([], () => r(require('../page/forget/forget')), 'forget')
 const profile = r => require.ensure([], () => r(require('../page/profile/profile')), 'profile')
 const info = r => require.ensure([], () => r(require('../page/profile/children/info')), 'info')
-const setInfo = r => require.ensure([], () => r(require('../page/profile/children/info/children/setInfo')), 'setInfo')
+const editInfo = r => require.ensure([], () => r(require('../page/profile/children/children/editInfo')), 'editInfo')
 
 export default [{
 	path: '/',
@@ -51,8 +51,8 @@ export default [{
 					component: info,
 					children: [
 						{
-							path: 'setInfo',
-							component: setInfo
+							path: 'editInfo',
+							component: editInfo
 						}
 					]
 				}

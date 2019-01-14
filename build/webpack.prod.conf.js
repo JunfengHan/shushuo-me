@@ -9,6 +9,7 @@ var MiniCssExtractPlugin = require("mini-css-extract-plugin");
 var env = config.build.env
 
 var webpackConfig = merge(baseWebpackConfig, {
+    mode: 'production',
     module: {
         rules: [
             {
