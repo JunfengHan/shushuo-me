@@ -1,7 +1,8 @@
 var path = require('path')
 var config = require('../config')
-var utils = require('./utils')
+// var utils = require('./utils')
 var projectRoot = path.resolve(__dirname, '../')
+var VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 var env = process.env.NODE_ENV
 
@@ -19,8 +20,8 @@ module.exports = {
         filename: '[name].js'
     },
     resolve: {
-        extensions: ['', '.js', '.vue', '.less', '.css', '.scss'],
-        fallback: [path.join(__dirname, '../node_modules')],
+        extensions: ['.js', '.vue', '.less', '.css', '.scss'],
+        modules: [path.join(__dirname, '../node_modules')],
         alias: {
             'vue$': 'vue/dist/vue.common.js',
             'src': path.resolve(__dirname, '../src'),
@@ -29,42 +30,56 @@ module.exports = {
         }
     },
     resolveLoader: {
-        fallback: [path.join(__dirname, '../node_modules')]
+        modules: [ 'node_modules' ],
+        extensions: [ '.js', '.json' ],
+        mainFields: [ 'loader', 'main' ]
     },
     module: {
-        loaders: [{
+        rules: [{
             test: /\.vue$/,
-            loader: 'vue'
+            use: 'vue-loader'
         }, {
+            test: /\.css$/,
+            use: ["style-loader", "css-loader", "postcss-loader"]
+        },
+        {
             test: /\.js$/,
-            loader: 'babel',
-            include: projectRoot,
-            exculde: '/node_modules/'
-        }, {
-            test: /\.json$/,
-            loader: 'json'
-        }, {
-            test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-            loader: 'url',
-            query: {
-                limit: 10000,
-                name: utils.assetsPath('img/[name].[ext]')
+            exclude: /(node_modules|bower_components)/,
+            use: {
+                loader: 'babel-loader',
+                options: {
+                    presets: ['@babel/preset-env']
+                }
             }
         }, {
+            test: /\.json$/,
+            use: 'json-loader'
+        }, {
+            test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+            use: [
+                {
+                    loader: 'url-loader',
+                    options: {
+                        limit: 10000,
+                        outputPath: 'images'
+                    }
+                }
+            ]
+        }, {
             test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-            loader: 'url',
-            query: 10000,
-            name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+            use: [
+                {
+                    loader: 'url-loader',
+                    options: {
+                        limit: 10000,
+                        outputPath: 'fonts'
+                    }
+                }
+            ]
         }]
     },
-    vue: {
-        loaders: utils.cssLoaders({
-            sourceMap: useCssSourceMap
-        }),
-        postcss: [
-            require('autoprefixer')({
-                browsers: ['last 10 versions']
-            })
-        ]
-    }
+    plugins: [
+        new VueLoaderPlugin(),
+        require('autoprefixer') // 自动添加css前缀
+    ]
 }

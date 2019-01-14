@@ -3,7 +3,9 @@ var webpack = require('webpack')
 var merge = require('webpack-merge')
 var utils = require('./utils')
 var baseWebpackConfig = require('./webpack.base.conf')
+var MiniCssExtractPlugin = require("mini-css-extract-plugin")
 var HtmlWebpackPlugin = require('html-webpack-plugin')
+var devMode = process.env.NODE_ENV !== 'production'
 
 // ---> add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
@@ -12,12 +14,18 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
 
 module.exports = merge(baseWebpackConfig, {
     module: {
-        loaders: utils.styleLoaders({
-            sourceMap: config.dev.cssSouceMap
-        })
+        rules: [{
+            test: /\.(sa|sc|c)ss$/,
+            use: [
+                devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+                'css-loader', // translates CSS into CommonJS
+                'sass-loader', // compiles Less to CSS
+                // loader: "style-loader" // creates style nodes from JS strings
+            ]
+        }]
     },
     // eval-source-map is faster for development
-    devtool: '#eval-source-map',
+    devtool: 'source-map',
     plugins: [
         new webpack.DefinePlugin({
             'process.env': config.dev.env
@@ -30,6 +38,12 @@ module.exports = merge(baseWebpackConfig, {
             template: 'index.html',
             favicon: 'favicon.ico',
             inject: true
+        }),
+        new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // both options are optional
+            filename: devMode ? '[name].css' : '[name].[hash].css',
+            chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
         })
     ]
 })

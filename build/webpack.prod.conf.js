@@ -5,25 +5,25 @@ var webpack = require('webpack')
 var merge = require('webpack-merge')
 var baseWebpackConfig = require('./webpack.base.conf')
 var ExtractTextPlugin = require('html-webpack-plugin')
+var MiniCssExtractPlugin = require("mini-css-extract-plugin");
 var env = config.build.env
 
 var webpackConfig = merge(baseWebpackConfig, {
     module: {
-        loaders: utils.styleLoaders({
-            sourceMap: config.build.productionSourceMap,
-            extract: true
-        })
+        rules: [
+            {
+                test:/\.less$/,
+                use:ExtractTextPlugin.extract({ //分离less编译后的css文件
+                    fallback:'style-loader',
+                    use:['css-loader','less-loader']
+                })
+            }
+        ]
     },
     output: {
         path: config.build.assetsRoot,
         filename: utils.assetsPath('js/[name].js'),
         chunkFilename: utils.assetsPath('js/[name].[chunkhash].min.js')
-    },
-    vue: {
-        loaders: utils.cssLoaders({
-            sourceMap: config.build.productionSourceMap,
-            extract: true
-        })
     },
     plugins: [
         new webpack.DefinePlugin({
@@ -36,7 +36,13 @@ var webpackConfig = merge(baseWebpackConfig, {
         }),
         new webpack.optimize.OccurrenceOrderPlugin(),
         // extract css into its own file
-        new ExtractTextPlugin(utils.assetsPath('css/[name].css')),
+        // new ExtractTextPlugin(utils.assetsPath('css/[name].css')),
+        new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // both options are optional
+            filename: devMode ? '[name].css' : '[name].[hash].css',
+            chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+        }),
         new HtmlWebpackPlugin({
             filename: config.build.index,
             template: 'index.html',

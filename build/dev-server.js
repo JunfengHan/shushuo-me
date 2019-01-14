@@ -4,11 +4,12 @@ if (!process.env.NODE_ENV) process.env.NODE_ENV = JSON.parse(config.dev.env.NODE
 var path = require('path')
 var koa = require('koa')
 var views = require('koa-views')
-var serve = require('koa-static')
+var static = require('koa-static')
 var opn = require('opn')
 var proxyMiddleware = require('http-proxy-middleware')
 var webpack = require('webpack')
 var webpackConfig = require('./webpack.dev.conf')
+var resolve = path.resolve
 
 var port = process.env.PORT || config.dev.port
 // Define HTTP proxies to your custom API backend
@@ -61,7 +62,7 @@ if (context.length) {
 Object.keys(proxyTable).forEach(function (context) {
     var options = proxyTable[context]
     if (typeof options === 'string') {
-        options = { target: options}
+        options = { target: options }
     }
     app.use(proxyMiddleware(context, options))
 })
@@ -78,8 +79,8 @@ app.use(hotMiddleware)
 
 // server pure static assets
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
-app.use(serve(r(staticPath)))
-app.use(views(r(staticPath)), {
+app.use(static(resolve(__dirname, staticPath)))
+app.use(views(resolve(__dirname, staticPath)), {
     extension: 'html'
 })
 
