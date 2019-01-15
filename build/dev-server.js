@@ -2,9 +2,7 @@ require('./check-version')()
 var config = require('../config')
 if (!process.env.NODE_ENV) process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
 var path = require('path')
-var koa = require('koa')
-var views = require('koa-views')
-var static = require('koa-static')
+var express = require('express')
 var opn = require('opn')
 var proxyMiddleware = require('http-proxy-middleware')
 var webpack = require('webpack')
@@ -15,7 +13,7 @@ var port = process.env.PORT || config.dev.port
 // Define HTTP proxies to your custom API backend
 var proxyTable = config.dev.proxyTable
 
-var app = new koa()
+var app = new express()
 var compiler = webpack(webpackConfig)
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
@@ -79,14 +77,16 @@ app.use(hotMiddleware)
 
 // server pure static assets
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
-app.use(static(resolve(__dirname, staticPath)))
-app.use(views(resolve(__dirname, staticPath)), {
-    extension: 'html'
-})
+// app.use(static(resolve(__dirname, staticPath)))
+// app.use(views(resolve(__dirname, staticPath)), {
+//     extension: 'html'
+// })
 
-app.use(async (ctx) => {
-    await ctx.render('index.html')
-})
+// app.use(async (ctx) => {
+//     await ctx.render('index.html')
+// })
+
+app.use(staticPath, express.static(resolve(__dirname, staticPath)))
 
 module.exports = app.listen(port, function(err) {
     if (err) {

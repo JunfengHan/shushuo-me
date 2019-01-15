@@ -56,3 +56,37 @@ exports.styleLoaders = function(options) {
     }
     return output
 }
+
+// ---> 封装 wepack-dev-middleware 为 koa 中间件
+const webpackDev  = require('webpack-dev-middleware')
+exports.devMiddleware = function (compiler, options) {
+    const middleware = webpackDev(compiler, options)
+    return async (ctx, next) => {
+        await middleware(ctx.req, {
+            end: (content) => {
+                ctx.body = content
+            },
+            setHeader: (name, value) => {
+                ctx.set(name, value)
+            }
+        }, next)
+    }
+}
+
+// ---> 封装 webpack-hot-middleware 为 koa 中间件
+const webpackHot = require('webpack-hot-middleware')
+const PassThrough = require('stream').PassThrough
+exports.hotMiddleware = (compiler, options) => {
+    const hotMiddleware = webpackHot(compiler, options)
+    return async (ctx, next) => {
+        let stream = new PassThrough()
+        ctx.body = stream
+        await hotMiddleware(ctx.req, {
+            write: stream.write.bind(stream),
+            writeHead: (status, headers) => {
+                ctx.status = status
+                ctx.set(headers)
+            }
+        }, next)
+    }
+}
