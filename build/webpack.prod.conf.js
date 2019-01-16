@@ -1,11 +1,12 @@
-var path = require('path')
 var config = require('../config')
 var utils = require('./utils')
 var webpack = require('webpack')
 var merge = require('webpack-merge')
 var baseWebpackConfig = require('./webpack.base.conf')
-var ExtractTextPlugin = require('html-webpack-plugin')
-var MiniCssExtractPlugin = require("mini-css-extract-plugin");
+var HtmlWebpackPlugin = require('html-webpack-plugin')
+var MiniCssExtractPlugin = require("mini-css-extract-plugin")
+var UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+var devMode = process.env.NODE_ENV !== 'production'
 var env = config.build.env
 
 var webpackConfig = merge(baseWebpackConfig, {
@@ -13,11 +14,11 @@ var webpackConfig = merge(baseWebpackConfig, {
     module: {
         rules: [
             {
-                test:/\.less$/,
-                use:ExtractTextPlugin.extract({ //分离less编译后的css文件
-                    fallback:'style-loader',
-                    use:['css-loader','less-loader']
-                })
+                test: /\.less$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader', 'less-loader'
+                ]
             }
         ]
     },
@@ -30,19 +31,14 @@ var webpackConfig = merge(baseWebpackConfig, {
         new webpack.DefinePlugin({
             'process.env': env
         }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            }
-        }),
         new webpack.optimize.OccurrenceOrderPlugin(),
         // extract css into its own file
-        // new ExtractTextPlugin(utils.assetsPath('css/[name].css')),
+        // new MiniCssExtractPlugin
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional
             filename: devMode ? '[name].css' : '[name].[hash].css',
-            chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+            chunkFilename: devMode ? '[id].css' : '[id].[hash].css'
         }),
         new HtmlWebpackPlugin({
             filename: config.build.index,
@@ -50,31 +46,32 @@ var webpackConfig = merge(baseWebpackConfig, {
             inject: true,
             // necessary to consistently work with multiple chunks via CommonsChunkPlugin
             chunksSortMode: 'dependency'
-        }),
-        // split vendor js into its own file
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            minChunks: function (module, count) {
-                // any required modules inside node_modules are extracted to vendor
-                return (
-                    module.resource &&
-                    /\.js$/.test(module.resource) &&
-                    module.resource.indexOf(
-                        path.join(__dirname, '../node_modules')
-                    ) === 0
-                )
-            }
-        }),
-        // extract webpack runtime and module manifest to its own file in order to
-        // prevent vendor hash from being updated whenever app bundle is updated
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'manifest',
-            chunks: ['vendor']
         })
-    ]
+    ],
+    optimization: {
+        // compress .js files
+        minimizer: [
+            new UglifyJsPlugin({
+                uglifyOptions: {
+                    compress: false
+                }
+            })
+        ],
+        // split vendor js into its own file
+        splitChunks: {
+            chunks: "all",
+            cacheGroups: {
+                default: false,
+                vendors: false,
+            }
+        }
+    }
 })
 
 if (config.build.productionGzip) {
+    /**
+     * 'compression-webpack-plugin' 插件可以将资源按 gzip等格式压缩
+     */
     var CompressionWebpackPlugin = require('compression-webpack-plugin')
 
     webpackConfig.plugins.push(
@@ -91,3 +88,5 @@ if (config.build.productionGzip) {
         })
     )
 }
+
+module.exports = webpackConfig

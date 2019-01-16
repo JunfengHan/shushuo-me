@@ -6,7 +6,7 @@ module.exports = {
         index: path.resolve(__dirname, '../dist/index.html'),
         assetsRoot: path.resolve(__dirname, '../dist'),
         assetsSubDirectory: 'static',
-        assetsPublicPath: '/dist/',
+        assetsPublicPath: '/',
         productionSourceMap: true,
         productionGzip: false,
         productionGzipExtensions: ['js', 'css']
@@ -24,7 +24,7 @@ module.exports = {
         ],
         proxypath: 'http://api.shushuo.me:4000',
         */
-        // ---> 使用axios跨域请求
+        // ---> 使用axios跨域请求,不需要配置代理
         proxyTable: {},
         cssSouceMap: false
     }

@@ -1,7 +1,6 @@
 var config = require('../config')
 var webpack = require('webpack')
 var merge = require('webpack-merge')
-var utils = require('./utils')
 var baseWebpackConfig = require('./webpack.base.conf')
 var MiniCssExtractPlugin = require("mini-css-extract-plugin")
 var HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -13,8 +12,10 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
 })
 
 module.exports = merge(baseWebpackConfig, {
+    // webpack工作模式，告知webpack 使用相应模式的内置优化
     mode: 'development',
     module: {
+        noParse: /lodash/,
         rules: [{
             test: /\.(sa|sc|le|c)ss$/,
             use: [
@@ -26,7 +27,8 @@ module.exports = merge(baseWebpackConfig, {
             ]
         }]
     },
-    // eval-source-map is faster for development
+    // 此选项控制是否生成，以及如何生成 source map
+    /************* 不同的值会明显影响到构建(build)和重新构建(rebuild)的速度 ************/
     devtool: 'source-map',
     plugins: [
         new webpack.DefinePlugin({
