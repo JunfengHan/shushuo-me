@@ -1,6 +1,6 @@
 var path = require('path')
 var config = require('../config')
-// var utils = require('./utils')
+var utils = require('./utils')
 var projectRoot = path.resolve(__dirname, '../')
 var VueLoaderPlugin = require('vue-loader/lib/plugin')
 
@@ -15,7 +15,7 @@ module.exports = {
     output: {
         path: config.build.assetsRoot,
         publicPath: process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath: config.dev.assetsPublicPath,
-        filename: '[name].[hash].js'
+        filename: '[name].js'
     },
     // 解析规则
     resolve: {
@@ -48,12 +48,15 @@ module.exports = {
         }, {
             test: /\.css$/,
             // 从右向左应用解析模块
-            use: ["style-loader", "css-loader", "postcss-loader"]
+            use: ["style-loader", "css-loader"]
         },
         {
             test: /\.js$/,
             // 排除不需要使用loader解析的目录
-            exclude: /(node_modules|bower_components)/,
+            exclude: file => (
+                /node_modules/.test(file) &&
+                !/\.vue\.js/.test(file)
+            ),
             use: {
                 loader: 'babel-loader',
                 options: {
@@ -70,7 +73,7 @@ module.exports = {
                     loader: 'url-loader',
                     options: {
                         limit: 10000,
-                        outputPath: 'images'
+                        outputPath: utils.assetsPath('images')
                     }
                 }
             ]
@@ -81,7 +84,7 @@ module.exports = {
                     loader: 'url-loader',
                     options: {
                         limit: 10000,
-                        outputPath: 'fonts'
+                        outputPath: utils.assetsPath('fonts/[name].[hash:6].[ext]')
                     }
                 }
             ]

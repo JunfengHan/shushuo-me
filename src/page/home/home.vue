@@ -17,7 +17,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 	.test > p {
 		background-color: aqua;
 	}

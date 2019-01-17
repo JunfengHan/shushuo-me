@@ -2,9 +2,8 @@ var config = require('../config')
 var webpack = require('webpack')
 var merge = require('webpack-merge')
 var baseWebpackConfig = require('./webpack.base.conf')
-var MiniCssExtractPlugin = require("mini-css-extract-plugin")
+var friendlyErrors = require('friendly-errors-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
-var devMode = process.env.NODE_ENV !== 'production'
 
 // ---> add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
@@ -19,7 +18,7 @@ module.exports = merge(baseWebpackConfig, {
         rules: [{
             test: /\.(sa|sc|le|c)ss$/,
             use: [
-                devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+                'vue-style-loader',
                 'css-loader', // translates CSS into CommonJS
                 'less-loader'
                 // 'sass-loader',            // compiles Less to CSS
@@ -43,11 +42,7 @@ module.exports = merge(baseWebpackConfig, {
             favicon: 'favicon.ico',
             inject: true
         }),
-        new MiniCssExtractPlugin({
-            // Options similar to the same options in webpackOptions.output
-            // both options are optional
-            filename: devMode ? '[name].css' : '[name].[hash].css',
-            chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
-        })
+        // 优化 webpack 报错输出
+        new friendlyErrors()
     ]
 })
