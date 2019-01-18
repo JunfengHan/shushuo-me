@@ -13,11 +13,14 @@ module.exports = {
     },
     // 输出
     output: {
+        // 所有静态文件输出目录，对应一个绝对路径
         path: config.build.assetsRoot,
+        // 项目中静态资源的路径，
+        // 静态资源最终访问路径 = output.publicPath + 资源loader或插件等配置路径
         publicPath: process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath: config.dev.assetsPublicPath,
         filename: '[name].js'
     },
-    // 解析规则
+    // 模块解析规则
     resolve: {
         // 自动解析时的扩展名称，配制后可以在引入模块时不使用扩展名
         extensions: ['.js', '.vue', '.less', '.css', '.scss'],
@@ -49,20 +52,14 @@ module.exports = {
             test: /\.css$/,
             // 从右向左应用解析模块
             use: ["style-loader", "css-loader"]
-        },
-        {
+        }, {
             test: /\.js$/,
             // 排除不需要使用loader解析的目录
             exclude: file => (
                 /node_modules/.test(file) &&
                 !/\.vue\.js/.test(file)
             ),
-            use: {
-                loader: 'babel-loader',
-                options: {
-                    presets: ['env']
-                }
-            }
+            use: 'babel-loader'
         }, {
             test: /\.json$/,
             use: 'json-loader'

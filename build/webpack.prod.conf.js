@@ -5,6 +5,7 @@ var merge = require('webpack-merge')
 var baseWebpackConfig = require('./webpack.base.conf')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var MiniCssExtractPlugin = require("mini-css-extract-plugin")
+var OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 var UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 var env = config.build.env
 
@@ -27,7 +28,9 @@ var webpackConfig = merge(baseWebpackConfig, {
                             * 引用其他如 img/a.png 会寻址错误
                             * 这种情况下所以单独需要配置 ../，复写其中资源的路径
                             */
-                            // publicPath: '../'
+                            // publickPath 相对于 output.path
+                            // by default it use publicPath in webpackOptions.output
+                            publicPath: '../'
                         }
                     },
                     'css-loader',
@@ -39,20 +42,21 @@ var webpackConfig = merge(baseWebpackConfig, {
     // 打包后 js 文件的输出
     output: {
         path: config.build.assetsRoot,
-        filename: utils.assetsPath('js/[name].[hash:6].js'),
-        chunkFilename: utils.assetsPath('js/[name].[chunkhash].min.js')
+        // 入口文件的文件名
+        filename: utils.assetsPath('js/[name].js'),
+        // chunk文件的文件名
+        chunkFilename: utils.assetsPath('js/[name].[chunkhash:6].min.js')
     },
     plugins: [
         new webpack.DefinePlugin({
             'process.env': env
         }),
         new webpack.optimize.OccurrenceOrderPlugin(),
-        // 抽离css extract css into its own file
+        // 抽离css into its own file
         new MiniCssExtractPlugin({
-            // Options similar to the same options in webpackOptions.output
-            // both options are optional
+            // 和 webpackOptions.output 一样，配置抽离的 css 文件名
             filename: utils.assetsPath('css/[name].[hash:6].css'),
-            chunkFilename: '[id].[hash:6].css'
+            chunkFilename: utils.assetsPath('css/[id].[hash:6].css')
         }),
         new HtmlWebpackPlugin({
             filename: config.build.index,
@@ -70,18 +74,29 @@ var webpackConfig = merge(baseWebpackConfig, {
             }
         })
     ],
+    // ****** 优化 ******
     optimization: {
-        // compress .js files
         minimizer: [
+            // 使用 UglifyJsPlugin 插件覆盖默认的 minimizer,丑化代码
             new UglifyJsPlugin({
                 uglifyOptions: {
-                    compress: true
+                    compress: true,
+                    cache: true,
+                    parallel: true,
+                    sourceMap: true // set to true if you want JS source maps
                 }
-            })
+            }),
+            // 生产环境下压缩 css
+            new OptimizeCSSAssetsPlugin({})
         ],
         // split vendor 和 公共 js into its own file
         splitChunks: {
+            // 对所有的 chunk 进行抽离，同步和异步的代码都会被抽离 
             chunks: "all",
+            /**
+             * https://webpack.docschina.org/plugins/split-chunks-plugin/#splitchunks-cachegroups
+             * cacheGroups 可以继承或覆盖 splitChunks.* 里的选项
+             */
             cacheGroups: {
                 // 提取 node_modules 中代码
                 vendors: {
@@ -89,6 +104,8 @@ var webpackConfig = merge(baseWebpackConfig, {
                     name: "vendors",
                     chunks: "all"
                 },
+                // https://webpack.docschina.org/plugins/split-chunks-plugin/#split-chunks-example-1
+                // Create a commons-async chunk, which includes all code shared between entry points
                 commons: {
                     // async 设置提取异步代码中的公用代码
                     chunks: "async",
@@ -102,11 +119,13 @@ var webpackConfig = merge(baseWebpackConfig, {
                     // 至少为两个 chunks 的公用代码
                     minChunks: 2
                 },
-                // 打包css文件为单文件
+                // 添加一个 styles chunk, 打包css文件为单文件
                 styles: {
-                    name: 'styles',
                     test: '/\.css/',
+                    name: 'styles',
                     chunks: "all",
+                    minChunks: 1,
+                    reuseExistingChunk: true,
                     enforce: true
                 }
             }

@@ -16,13 +16,13 @@ module.exports = merge(baseWebpackConfig, {
     module: {
         noParse: /lodash/,
         rules: [{
-            test: /\.(sa|sc|le|c)ss$/,
+            test: /\.(le|c)ss$/,
             use: [
+                // 开发环境下不需要使用 MiniCssExtractPlugin 提取css代码
                 'vue-style-loader',
+                // loader: "style-loader"    // creates style nodes from JS strings
                 'css-loader', // translates CSS into CommonJS
                 'less-loader'
-                // 'sass-loader',            // compiles Less to CSS
-                // loader: "style-loader"    // creates style nodes from JS strings
             ]
         }]
     },
