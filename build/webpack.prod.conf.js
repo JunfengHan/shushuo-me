@@ -29,8 +29,8 @@ var webpackConfig = merge(baseWebpackConfig, {
                             * 这种情况下所以单独需要配置 ../，复写其中资源的路径
                             */
                             // publickPath 相对于 output.path
-                            // by default it use publicPath in webpackOptions.output
-                            // publicPath: '../'
+                            // 单独配置css中 url 引用路径
+                            publicPath: '../'
                         }
                     },
                     'css-loader',
@@ -121,7 +121,8 @@ var webpackConfig = merge(baseWebpackConfig, {
                     test: '/\.css/',
                     name: 'styles',
                     chunks: "all",
-                    enforce: true
+                    enforce: true,
+                    priority: 20
                 }
             }
         },

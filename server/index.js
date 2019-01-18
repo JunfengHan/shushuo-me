@@ -1,6 +1,6 @@
 const Koa = require('koa')
 const { resolve } = require('path')
-
+const config = require('./config/server')
 const { connect, initSchemas, initAdmin } = require('./data/init')
 const R = require('ramda')
 const MIDDLEWARES = ['router']
@@ -29,7 +29,7 @@ const useMiddlewares = (app) => {
 
     await useMiddlewares(app)
 
-    app.listen(4000, function (err) {
+    app.listen(config.port, function (err) {
         if (err) {
             console.log('服务器监听出错了：' + err)
         }

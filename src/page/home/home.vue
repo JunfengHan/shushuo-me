@@ -18,6 +18,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
+	@import "src/style/mixin";
+	@import "src/style/common";
 	.test > p {
 		background-color: aqua;
 	}
