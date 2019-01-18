@@ -30,7 +30,7 @@ var webpackConfig = merge(baseWebpackConfig, {
                             */
                             // publickPath 相对于 output.path
                             // by default it use publicPath in webpackOptions.output
-                            publicPath: '../'
+                            // publicPath: '../'
                         }
                     },
                     'css-loader',
@@ -54,8 +54,8 @@ var webpackConfig = merge(baseWebpackConfig, {
         new webpack.optimize.OccurrenceOrderPlugin(),
         // 抽离css into its own file
         new MiniCssExtractPlugin({
-            // 和 webpackOptions.output 一样，配置抽离的 css 文件名
-            filename: utils.assetsPath('css/[name].[hash:6].css'),
+            // 像 webpackOptions.output 一样，配置抽离的 css 文件
+            filename: utils.assetsPath('css/[name].css'),
             chunkFilename: utils.assetsPath('css/[id].[hash:6].css')
         }),
         new HtmlWebpackPlugin({
@@ -79,12 +79,9 @@ var webpackConfig = merge(baseWebpackConfig, {
         minimizer: [
             // 使用 UglifyJsPlugin 插件覆盖默认的 minimizer,丑化代码
             new UglifyJsPlugin({
-                uglifyOptions: {
-                    compress: true,
-                    cache: true,
-                    parallel: true,
-                    sourceMap: true // set to true if you want JS source maps
-                }
+                cache: true,
+                parallel: true,
+                sourceMap: true // set to true if you want JS source maps
             }),
             // 生产环境下压缩 css
             new OptimizeCSSAssetsPlugin({})
@@ -119,13 +116,11 @@ var webpackConfig = merge(baseWebpackConfig, {
                     // 至少为两个 chunks 的公用代码
                     minChunks: 2
                 },
-                // 添加一个 styles chunk, 打包css文件为单文件
+                // 添加一个 styles chunk, 打包css文件为单文件, 和 MiniCssExtractPlugin 
                 styles: {
                     test: '/\.css/',
                     name: 'styles',
                     chunks: "all",
-                    minChunks: 1,
-                    reuseExistingChunk: true,
                     enforce: true
                 }
             }
