@@ -28,7 +28,7 @@ class userController {
         }
     
         return (ctx.body = {
-            code: 0
+            success: true
         })
     }
 

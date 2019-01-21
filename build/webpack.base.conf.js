@@ -31,7 +31,8 @@ module.exports = {
             'vue$': 'vue/dist/vue.common.js',
             'src': path.resolve(__dirname, '../src'),
             'assets': path.resolve(__dirname, '../src/assets'),
-            'components': path.relative(__dirname, '../src/compontens')
+            'components': path.relative(__dirname, '../src/compontens'),
+            'utils': path.resolve(__dirname, '../server/lib/utils')
         }
     },
     // 与resolve 对象的属性集合相同，但仅用于解析webpack 的 loader 包

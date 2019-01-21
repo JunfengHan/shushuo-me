@@ -21,6 +21,10 @@ const userSchema = new Schema({
         required: true,
         type: String
     },
+    phoneNum: {
+        required: true,
+        type: Number
+    },
     lockUntil: Number,
     meta: {
         createdAt: {
@@ -54,11 +58,17 @@ userSchema.pre('save', function (next) {
     if (!this.isModified('passWord')) return next()
 
     bcrypt.genSalt(SALT_WORK_FACTOR, (err, hash) => {
-        if (err) return next()
+        if (err) return next(err)
 
-        this.passWord = hash
-        next()
+        bcrypt.hash(this.password, salt, (error, hash) => {
+            if (error) return next(error)
+
+            this.passWord = hash
+            next()
+        })
     })
+
+    next()
 })
 
 userSchema.methods = {
