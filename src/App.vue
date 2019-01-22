@@ -20,10 +20,10 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 	@import './style/common';
 	.fade-enter-active, .fade-leave-active {
-		transition: opacity .3s;
+		transition: opacity .2s;
 	}
 	.fade-enter, .fade-leave-active {
 		opacity: 0;
