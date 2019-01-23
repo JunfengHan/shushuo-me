@@ -5,28 +5,57 @@
 		</div>
 		<form class="login-form">
 			<section class="input_container">
-                <input type="text" placeholder="账号" v-model.lazy="userAccount">
+                <input type="text" placeholder="邮箱/手机号码" v-model.lazy="userAccount">
             </section>
 			<section class="input_container">
-                <input placeholder="密码"  v-model="passWord">
+                <input placeholder="密码" type="password" v-model="passWord">
             </section>
 		</form>
 		<p class="login_tips">
             温馨提示：未注册过的账号，登录时将自动注册
         </p>
 		<div class="login_container" @click="login">登录</div>
+		<alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" :alertText="alertText"></alert-tip>
 	</div>
 </template>
 
 <script>
-export default {
-	data() {
-		return {
-			userAccount: null, //用户名
-			passWord: null, //密码
+	import alertTip from '../../components/common/alertTip'
+	import { accountLogin } from '../../service/getData'
+
+	export default {
+		data() {
+			return {
+				userAccount: null, //用户名
+				passWord: null, //密码
+				showAlert: false, //显示提示组件
+				alertText: null, //提示的内容
+			}
+		},
+		methods: {
+			async login() {
+				if (!this.userAccount) {
+					this.showAlert = true;
+					this.alertText = '请输入手机号/邮箱/用户名';
+					return
+				} else if (!this.passWord){
+					this.showAlert = true;
+					this.alertText = '请输入密码';
+					return
+				}
+	
+				//用户名登录
+				this.userInfo = await accountLogin(this.userAccount, this.passWord);
+			},
+			closeTip(){
+                this.showAlert = false;
+            }
+		},
+		components: {
+			alertTip,
 		}
+
 	}
-}
 </script>
 
 <style lang="less">

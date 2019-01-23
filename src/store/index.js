@@ -8,13 +8,14 @@ import getters from './getters'
 Vue.use(Vuex)
 
 const state = {
-	login: true,  //是否登录
-	imgPath:null  //头像地址
+	login: false,  //是否登录
+	imgPath:null,  //头像地址
+	userInfo: null, //用户信息
 }
 
 export default new Vuex.Store({
 	state,
 	getters,
 	actions,
-	mutations
+	mutations,
 })
