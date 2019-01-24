@@ -7,10 +7,9 @@
  * 
  */
 
-let baseUrl = ''; 
+let baseUrl = 'http://localhost:4000'; 
 let routerMode = 'hash';
 let imgBaseUrl = '';
-
 
 if (process.env.NODE_ENV == 'development') {
     imgBaseUrl = '/img/';

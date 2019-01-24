@@ -21,14 +21,14 @@ export async function getUser () {
 /**
  * 账号注册
  */
-export async function register () {
+export async function accountRegister (param) {
     try {
-        const response = axios.post(url.accountRegister, {
-            user_id: getStore('user_id')
-        })
+        console.log(url.accountRegister)
+        const response = axios.post(url.accountRegister, param)
+        console.log('getData--------------------', response)
         return response
     } catch (error) {
-        return error
+        return '注册失败'
     }
 }
 
@@ -42,7 +42,7 @@ export async function accontLogin () {
         })
         return response
     } catch (error) {
-        return error
+        return '登录错误'
     }
 }
 

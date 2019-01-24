@@ -22,7 +22,7 @@ const userSchema = new Schema({
         type: String
     },
     phoneNum: {
-        required: true,
+        // required: true,
         type: Number
     },
     lockUntil: Number,

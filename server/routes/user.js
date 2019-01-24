@@ -18,7 +18,7 @@ class userController {
     @post('/register')
     async register (ctx, next) {
         const userInfo = ctx.request.body
-        
+        console.log('userInfo---------------', userInfo)
         const isLegal = await validateUserInfo(userInfo)
         const isCode = await checkCode(userInfo.verificationCode)
     
@@ -28,7 +28,9 @@ class userController {
         }
     
         return (ctx.body = {
-            success: true
+            "code": 1,
+            "mes": "success",
+            "data": {}
         })
     }
 
@@ -40,20 +42,27 @@ class userController {
 
         if (!matchData.match) {
             return (ctx.body = {
-                success: false,
-                err: '用户名或密码不正确'
+                "code": 0,
+                "mes": "用户名或密码不正确",
+                "data": {}
             })
         }
 
         if (matchData.match) {
             return (ctx.body = {
-                success: true
+                "code": 1,
+                "mes": "success",
+                // TODO:返回给前端的信息
+                "data": {
+                    user_id: 'user_id'
+                }
             })
         }
 
         return (ctx.body = {
-            success: false,
-            err: '用户名或密码不正确'
+            "code": 0,
+            "mes": "用户名或密码不正确",
+            "data": {}
         })
     }
 

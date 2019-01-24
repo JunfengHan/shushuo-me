@@ -23,7 +23,7 @@ const useMiddlewares = (app) => {
     await connect()
     initSchemas()
     // 初始化一个用户，用于测试
-    await initAdmin()
+    // await initAdmin()
 
     const app = new Koa()
 

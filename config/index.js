@@ -13,7 +13,7 @@ module.exports = {
     },
     dev: {
         env: require('./dev.env'),
-        port: 4000,
+        port: 8081,
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         // ---> 代理路径
